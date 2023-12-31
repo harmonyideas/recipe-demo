@@ -52,7 +52,7 @@ Create a table using SQL editor
   ingredients text,
   instructions text,
   region text
-```);
+);```
 
 ### 5. Run the application
 Initialize the app: `npm init`
