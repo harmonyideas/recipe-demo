@@ -56,6 +56,60 @@ CREATE TABLE recipes (
 );
 ```
 
+Execute SQL scripts
+
+```
+ALTER TABLE recipes ADD COLUMN file_path TEXT NULL
+```
+
+```
+alter table recipes add column user_id uuid references auth.users null;
+```
+
+```
+insert into storage.buckets (id, name)
+values ('recipe_images', 'recipe_images');
+
+-- Create bucket policies
+-- Policy that allows any authenticated user to view all recipe images
+create policy "Any authenticated user can view recipe images"
+  on storage.objects for select
+  using ( bucket_id = 'recipe_images' );
+
+-- Policy that allows the user that creates a recipe to upload an image for the recipe
+create policy "User can upload their own recipe image"
+  on storage.objects for insert
+  with check ( 
+    bucket_id = 'recipe_images'
+    and auth.uid() = owner
+  );
+
+-- Policy that allows the user that first uploaded an image (owner) to update the image
+create policy "User can update their own recipe image"
+  on storage.objects for update
+  using (
+    bucket_id = 'recipe_images'
+    and auth.uid() = owner
+  );
+```
+```
+create policy "Recipes can only viewed by owner"
+  on recipes for select
+  using ( user_id = auth.uid() );
+
+create policy "Owner can create their own recipes"
+  on recipes for insert
+  with check ( auth.uid() = user_id );
+
+create policy "Owner can update their own recipes"
+  on recipes for update
+  using ( auth.uid() = user_id );
+```
+```
+alter table recipes enable row level security;
+```
+
+
 ### 5. Run the application
 Initialize the app: `npm init`
 Run the application: `npm run dev`. Open your browser to `https://localhost:3000/` and you are ready to go 🚀.

@@ -42,9 +42,9 @@ export default function NewRecipe() {
           await supabase
             .from('recipes')
             .insert({
-              make: recipeTitle,
-              model: recipeDescription,
-              production_year: recipeRegion,
+              title: recipeTitle,
+              description: recipeDescription,
+              region: recipeRegion,
               file_path: recipeImagePath,
               user_id: session.user.id,
             });

@@ -12,6 +12,7 @@ export default function Home({ recipes }) {
         <div>
       <Header />
       <h2>Recipes</h2>
+      <a href={`/recipes/new`}>+ Add New Recipe</a>
       <ul>
         {recipes.map((recipe) => (
           <li key={recipe.id}><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></li>
@@ -22,9 +23,9 @@ export default function Home({ recipes }) {
         {
           session &&
           <>
-            <h3>Session data</h3>
-            <h4>Access token: {session.access_token}</h4>
-            <h4>Email: {session.user?.email}</h4>
+            <pre>Session data</pre>
+            <pre>Access token: {session.access_token}</pre>
+            <pre>Email: {session.user?.email}</pre>
             <button onClick={() => {
               supabase.auth.signOut()
               router.replace('/signin')
