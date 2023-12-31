@@ -3,6 +3,10 @@ export default function RecipeForm({
   onTitleChange,
   recipeDescription,
   onDescriptionChange,
+  recipeIngredients,
+  onIngredientsChange,
+  recipeInstructions,
+  onInstructionsChange,
   recipeRegion,
   onRegionChange,
   onRecipeImageChange,
@@ -25,6 +29,24 @@ export default function RecipeForm({
           value={recipeDescription}
           placeholder='Description'
           onChange={onDescriptionChange}
+        />
+      </label>
+
+      <label>Ingredients
+        <input
+          name='ingredients'
+          value={recipeIngredients}
+          placeholder='Ingredients'
+          onChange={onIngredientsChange}
+        />
+      </label>
+
+      <label>Instructions
+        <input
+          name='instructions'
+          value={recipeInstructions}
+          placeholder='Instructions'
+          onChange={onInstructionsChange}
         />
       </label>
 

@@ -49,6 +49,8 @@ export default function EditRecipe({ recipe }) {
             .update({
               title: recipeTitle,
               description: recipeDescription,
+              ingredients: recipeIngredients,
+              instructions: recipeInstructions,
               region: recipeRegion,
               file_path: recipeImagePath,
             })
