@@ -9,17 +9,21 @@ export default function Home({ recipes }) {
   const router = useRouter()
   return (
     <>
-        <div>
+    <div>
       <Header />
-      <h2>Recipes</h2>
       <a href={`/recipes/new`}>+ Add New Recipe</a>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></li>
-        ))}
-      </ul>
+      <div class="container">
+        <div class="row">
+          {recipes.map((recipe) => (
+            <div class="col-sm" key={recipe.id}>
+            <span><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
       <div>
+      <footer className="contrast-footer footer-dark footer-shadow-dark p-5">
         {
           session &&
           <>
@@ -32,6 +36,7 @@ export default function Home({ recipes }) {
             }}>Sign out</button>
           </>
         }
+        </footer>
       </div>
     </>
   )
