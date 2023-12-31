@@ -43,7 +43,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 Populate this file with your URL and Key.
 
 ### 5. Run the application
-Initialize the app: 'npm init'
+Initialize the app: `npm init`
 Run the application: `npm run dev`. Open your browser to `https://localhost:3000/` and you are ready to go 🚀.
 
 ## Supabase details
