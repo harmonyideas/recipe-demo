@@ -14,6 +14,7 @@ export default function RecipeForm({
 }) {
   return (
     <form onSubmit={onSubmit}>
+      <div>
       <label>Title
         <input
           name='title'
@@ -22,7 +23,8 @@ export default function RecipeForm({
           onChange={onTitleChange}
         />
       </label>
-
+      </div>
+      <div>
       <label>Description
         <textarea
           name='description'
@@ -31,7 +33,8 @@ export default function RecipeForm({
           onChange={onDescriptionChange}
         />
       </label>
-
+      </div>
+      <div>
       <label>Ingredients
         <textarea
           name='ingredients'
@@ -40,7 +43,8 @@ export default function RecipeForm({
           onChange={onIngredientsChange}
         />
       </label>
-
+      </div>
+      <div>
       <label>Instructions
         <textarea
           name='instructions'
@@ -49,7 +53,8 @@ export default function RecipeForm({
           onChange={onInstructionsChange}
         />
       </label>
-
+      </div>
+      <div>
       <label>Recipe region
         <input
           name='region'
@@ -58,6 +63,7 @@ export default function RecipeForm({
           onChange={onRegionChange}
         />
       </label>
+      </div>
 
       <label>Recipe image
         <input

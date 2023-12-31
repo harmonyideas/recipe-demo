@@ -22,12 +22,20 @@ li {
 label {
   display: block;
   margin: 10px;
+  margin-right: 30px;
 }
 
 input {
   margin: 0px 10px;
   width: 50%;
   line-height: 30px;
+}
+
+textarea {
+  display: block;
+  margin: 0px 0px;
+  width: 25%;
+  line-height: 50px;
 }
 
 * {
