@@ -14,7 +14,7 @@ export default function Home({ recipes }) {
       <h2>Recipes</h2>
       <ul>
         {recipes.map((recipe) => (
-          <li key={recipe.id}><a href={`/recipes/${recipe.id}`}>{recipe.title}</a><div>{recipe.description}</div></li>
+          <li key={recipe.id}><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></li>
         ))}
       </ul>
     </div>
