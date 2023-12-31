@@ -1,4 +1,4 @@
-# Supabase Recipe Demo App
+# Supabase and Next.js Recipe Demo App
 
 This example will set you up for a very common situation: users can sign up with a magic link and then update their account with public profile information, including a profile image.
 
