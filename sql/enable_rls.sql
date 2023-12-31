@@ -1,1 +1,1 @@
-alter table bikes enable row level security;
+alter table recipes enable row level security;

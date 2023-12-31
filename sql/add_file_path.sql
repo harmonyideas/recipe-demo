@@ -1,1 +1,1 @@
-ALTER TABLE bikes ADD COLUMN file_path TEXT NULL
+ALTER TABLE recipes ADD COLUMN file_path TEXT NULL

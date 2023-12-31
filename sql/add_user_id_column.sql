@@ -1,1 +1,1 @@
-alter table bikes add column user_id uuid references auth.users null;
+alter table recipes add column user_id uuid references auth.users null;
