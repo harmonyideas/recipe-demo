@@ -6,6 +6,8 @@ import { supabase } from '../../supabase-client';
 export default function NewRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('')
   const [recipeDescription, setRecipeDescription] = useState('')
+  const [recipeIngredients, setRecipeIngredients] = useState('')
+  const [recipeInstructions, setRecipeInstructions] = useState('')
   const [recipeRegion, setRecipeRegion] = useState('')
   const [recipeImagePath, setRecipeImagePath] = useState('')
   const router = useRouter();
@@ -19,6 +21,10 @@ export default function NewRecipe() {
         onTitleChange={(evt) => setRecipeTitle(evt.target.value)}
         recipeDescription={recipeDescription}
         onDescriptionChange={(evt) => setRecipeDescription(evt.target.value)}
+        recipeIngredients={recipeIngredients}
+        onIngredientsChange={(evt) => setRecipeIngredients(evt.target.value)}
+        recipeInstructions={recipeInstructions}
+        onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
         onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
         onRecipeImageChange={(evt) => {
@@ -44,6 +50,8 @@ export default function NewRecipe() {
             .insert({
               title: recipeTitle,
               description: recipeDescription,
+              ingredients: recipeIngredients,
+              instructions: recipeInstructions,
               region: recipeRegion,
               file_path: recipeImagePath,
               user_id: session.user.id,
