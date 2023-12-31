@@ -26,6 +26,8 @@ label {
 
 input {
   margin: 0px 10px;
+  width: 50%;
+  line-height: 30px;
 }
 
 * {

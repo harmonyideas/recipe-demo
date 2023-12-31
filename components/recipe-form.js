@@ -24,7 +24,7 @@ export default function RecipeForm({
       </label>
 
       <label>Description
-        <input
+        <textarea
           name='description'
           value={recipeDescription}
           placeholder='Description'
@@ -33,7 +33,7 @@ export default function RecipeForm({
       </label>
 
       <label>Ingredients
-        <input
+        <textarea
           name='ingredients'
           value={recipeIngredients}
           placeholder='Ingredients'
@@ -42,7 +42,7 @@ export default function RecipeForm({
       </label>
 
       <label>Instructions
-        <input
+        <textarea
           name='instructions'
           value={recipeInstructions}
           placeholder='Instructions'
