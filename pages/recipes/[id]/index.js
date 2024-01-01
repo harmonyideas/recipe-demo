@@ -40,6 +40,8 @@ export default function ViewRecipe({ recipe }) {
   return (
     <>
       <h1>Recipe details</h1>
+      <label>Created: {recipe.created_at}</label>
+
       <label>Title: {recipe.title}</label>
 
       <label>Description: {recipe.description}</label>
