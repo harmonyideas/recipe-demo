@@ -36,10 +36,10 @@ export default function EditRecipe({ recipe }) {
               imageFile,
               { upsert: true })
             .then(response => {
-              setrecipeImagePath(imagePath)
+              setRecipeImagePath(imagePath)
             })
             .catch(error => {
-              // TODO: show error message popup
+              console.log(error);
             })
         }}
         onSubmit={async (evt) => {

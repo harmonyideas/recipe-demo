@@ -11,46 +11,46 @@ export default function Home({ recipes }) {
   let results = recipes.results;
   let renderRows = [];
 
-  recipes.forEach ((result, i) => {
+  recipes.forEach((result, i) => {
 
     // prepare the array for a 4 column layout
     renderRows.push(
-      <div key ={i} className="col-md-3">
-        <div result={result}><a href={`/recipes/${result.id}`}>{result.title}</a></div> 
+      <div key={i} className="col-md-3">
+        <div result={result}><a href={`/recipes/${result.id}`}>{result.title}</a></div>
       </div>
     );
 
     // after four items add a new row 
-    if((i+1) % 4 === 0) {
-      renderRows.push(<div className ="row mt-4"></div>);
+    if ((i + 1) % 4 === 0) {
+      renderRows.push(<div key={i + 1} className="row mt-3"></div>);
     }
   });
 
   return (
     <>
-    <div>
-      <Header />
-      <a href={`/recipes/new`}>+ Add New Recipe</a>
-      <div className="container">
-        <div className="row">
-          {renderRows}
+      <div>
+        <Header />
+        <a href={`/recipes/new`}>+ Add New Recipe</a>
+        <div className="container">
+          <div className="row">
+            {renderRows}
+          </div>
         </div>
       </div>
-    </div>
       <div>
-      <footer className="contrast-footer footer-dark footer-shadow-dark p-5">
-        {
-          session &&
-          <>
-            <pre>Session data</pre>
-            <pre>Access token: {session.access_token}</pre>
-            <pre>Email: {session.user?.email}</pre>
-            <button onClick={() => {
-              supabase.auth.signOut()
-              router.replace('/signin')
-            }}>Sign out</button>
-          </>
-        }
+        <footer className="contrast-footer footer-dark footer-shadow-dark p-5">
+          {
+            session &&
+            <>
+              <pre>Session data</pre>
+              <pre>Access token: {session.access_token}</pre>
+              <pre>Email: {session.user?.email}</pre>
+              <button onClick={() => {
+                supabase.auth.signOut()
+                router.replace('/signin')
+              }}>Sign out</button>
+            </>
+          }
         </footer>
       </div>
     </>

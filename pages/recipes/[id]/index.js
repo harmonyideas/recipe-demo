@@ -8,7 +8,6 @@ export default function ViewRecipe({ recipe }) {
   const [signedUrl, setSignedUrl] = useState('')
   useEffect(() => {
     if (recipe.file_path) {
-
       // Signed URL
       supabase
         .storage
@@ -19,9 +18,8 @@ export default function ViewRecipe({ recipe }) {
         )
         .then(data => {
           if (data.error) {
-            // TODO: Handle error
+            console.log(error);
           }
-
           setSignedUrl(data.signedURL)
         })
     }
@@ -49,7 +47,7 @@ export default function ViewRecipe({ recipe }) {
       <label>Instructions: {recipe.instructions}</label>
 
       <label>Region: {recipe.region}</label>
-
+      
       {
         signedUrl &&
         <div>
