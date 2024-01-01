@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase-client'
 
+
 export default function ViewRecipe({ recipe }) {
   const router = useRouter()
   const [signedUrl, setSignedUrl] = useState('')
@@ -34,26 +35,30 @@ export default function ViewRecipe({ recipe }) {
       .publicURL
     :
     ''
-
   return (
     <>
       <h1>Recipe details</h1>
-      <label>Title: {recipe.title}</label>
+      <div className="container">
+        <div className="row">
+          <div className="col-xs-1">
+            <label>Title: {recipe.title}</label>
 
-      <label>Description: {recipe.description}</label>
+            <label>Description: {recipe.description}</label>
 
-      <label>Ingredients: {recipe.ingredients}</label>
+            <label>Ingredients: {recipe.ingredients}</label>
 
-      <label>Instructions: {recipe.instructions}</label>
+            <label>Instructions: {recipe.instructions}</label>
 
-      <label>Region: {recipe.region}</label>
-      
-      {
-        signedUrl &&
-        <div>
-          <img src={signedUrl} />
+            <label>Region: {recipe.region}</label>
+            {
+              signedUrl &&
+              <div>
+                <img src={signedUrl} />
+              </div>
+            }
+          </div>
         </div>
-      }
+      </div>
 
       <div>
         <Link href={`/recipes/${recipe.id}/edit`}>

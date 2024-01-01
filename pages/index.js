@@ -1,6 +1,7 @@
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import { supabase } from '../supabase-client'
+import { useEffect, useState } from 'react'
 import { useSession } from '../utils/user-context'
 import Header from '../components/header';
 
@@ -8,15 +9,39 @@ export default function Home({ recipes }) {
   const { session } = useSession()
   const router = useRouter()
 
-  let results = recipes.results;
   let renderRows = [];
 
   recipes.forEach((result, i) => {
+    const [signedUrl, setSignedUrl] = useState('')
+
+    useEffect(() => {
+      if (result.file_path) {
+        // Signed URL
+        supabase
+          .storage
+          .from('recipe_images') // bucket name
+          .createSignedUrl(
+            result.file_path, // path to the image in the bucket
+            36000, // time that the URL is valid in seconds
+          )
+          .then(data => {
+            if (data.error) {
+              console.log(error);
+            }
+            setSignedUrl(data.signedURL)
+          })
+      }
+    }, [result])
 
     // prepare the array for a 4 column layout
     renderRows.push(
       <div key={i} className="col-md-3">
-        <div result={result}><a href={`/recipes/${result.id}`}>{result.title}</a></div>
+        <div result={result}><a href={`/recipes/${result.id}`}>{result.title} {
+          signedUrl &&
+          <div>
+            <img clasName="thumbnail" src={signedUrl} />
+          </div>
+        }</a></div>
       </div>
     );
 
