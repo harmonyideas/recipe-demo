@@ -40,17 +40,23 @@ export default function ViewRecipe({ recipe }) {
   return (
     <>
       <h1>Recipe details</h1>
-      <label>Created: {recipe.created_at}</label>
+      <div className="container">
+        <div className="row">
+          <div className="col-sm">
+          <label>Created: {recipe.created_at}</label>
 
-      <label>Title: {recipe.title}</label>
+          <label>Title: {recipe.title}</label>
 
-      <label>Description: {recipe.description}</label>
+          <label>Description: {recipe.description}</label>
 
-      <label>Ingredients: {recipe.ingredients}</label>
+          <label>Ingredients: {recipe.ingredients}</label>
 
-      <label>Instructions: {recipe.instructions}</label>
+          <label>Instructions: {recipe.instructions}</label>
 
-      <label>Region: {recipe.region}</label>
+          <label>Region: {recipe.region}</label>
+          </div>
+        </div>
+      </div>
 
       {
         signedUrl &&
