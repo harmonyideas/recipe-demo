@@ -12,10 +12,10 @@ export default function Home({ recipes }) {
     <div>
       <Header />
       <a href={`/recipes/new`}>+ Add New Recipe</a>
-      <div class="container">
-        <div class="row">
+      <div className="container">
+        <div className="row">
           {recipes.map((recipe) => (
-            <div class="col-sm" key={recipe.id}>
+            <div className="col-sm" key={recipe.id}>
             <span><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></span>
             </div>
           ))}

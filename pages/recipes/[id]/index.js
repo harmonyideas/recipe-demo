@@ -62,11 +62,11 @@ export default function ViewRecipe({ recipe }) {
           <a className='button'>Edit recipe</a>
         </Link>
         <button onClick={async (evt) => {
-          await supabase
+          const error = await supabase
             .from('recipes')
             .delete()
-            .match({ id: recipe.id })
-
+            .eq('id', recipe.id)
+          console.log(error);
           router.replace('/')
         }}>Delete recipe</button>
       </div>

@@ -6,6 +6,10 @@ create policy "Owner can create their own recipes"
   on recipes for insert
   with check ( auth.uid() = user_id );
 
+create policy "Owner can delete their own recipes"
+  on recipes for delete
+  using ( auth.uid() = user_id );
+
 create policy "Owner can update their own recipes"
   on recipes for update
   using ( auth.uid() = user_id );
