@@ -7,6 +7,26 @@ import Header from '../components/header';
 export default function Home({ recipes }) {
   const { session } = useSession()
   const router = useRouter()
+
+  let results = recipes.results;
+  let renderRows = [], columns = [];
+
+  recipes.forEach ((result, i) => {
+
+    // prepare the array for a 4 column layout
+    columns.push(
+      <div key ={i} className="col-md-3">
+        <div result={result}><a href={`/recipes/${result.id}`}>{result.title}</a></div> 
+      </div>
+    );
+
+    // after four items add a new row 
+    if((i+1) % 4 === 0) {
+      renderRows.push(<div className ="row mt-4">{columns}</div>);
+      columns = [];
+    }
+  });
+
   return (
     <>
     <div>
@@ -14,11 +34,7 @@ export default function Home({ recipes }) {
       <a href={`/recipes/new`}>+ Add New Recipe</a>
       <div className="container">
         <div className="row">
-          {recipes.map((recipe) => (
-            <div className="col-sm" key={recipe.id}>
-            <span><a href={`/recipes/${recipe.id}`}>{recipe.title}</a></span>
-            </div>
-          ))}
+          {renderRows}
         </div>
       </div>
     </div>
