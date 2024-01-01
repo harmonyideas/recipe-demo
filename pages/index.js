@@ -9,12 +9,12 @@ export default function Home({ recipes }) {
   const router = useRouter()
 
   let results = recipes.results;
-  let renderRows = [], columns = [];
+  let renderRows = [];
 
   recipes.forEach ((result, i) => {
 
     // prepare the array for a 4 column layout
-    columns.push(
+    renderRows.push(
       <div key ={i} className="col-md-3">
         <div result={result}><a href={`/recipes/${result.id}`}>{result.title}</a></div> 
       </div>
@@ -22,8 +22,7 @@ export default function Home({ recipes }) {
 
     // after four items add a new row 
     if((i+1) % 4 === 0) {
-      renderRows.push(<div className ="row mt-4">{columns}</div>);
-      columns = [];
+      renderRows.push(<div className ="row mt-4"></div>);
     }
   });
 
