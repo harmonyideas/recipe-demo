@@ -41,17 +41,6 @@ export default function ViewRecipe({ recipe }) {
       <div className="container">
         <div className="row">
 <<<<<<< HEAD
-          <div className="col-sm">
-          <label>Created: {recipe.created_at}</label>
-
-          <label>Title: {recipe.title}</label>
-
-          <label>Description: {recipe.description}</label>
-
-          <label>Ingredients: {recipe.ingredients}</label>
-
-=======
-<<<<<<< HEAD
           <div className="col-xs-1">
             <label>Title: {recipe.title}</label>
 
@@ -79,7 +68,6 @@ export default function ViewRecipe({ recipe }) {
 
           <label>Ingredients: {recipe.ingredients}</label>
 
->>>>>>> dev
           <label>Instructions: {recipe.instructions}</label>
 
           <label>Region: {recipe.region}</label>
