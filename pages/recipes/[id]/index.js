@@ -9,7 +9,7 @@ export default function ViewRecipe({ recipe }) {
   const [signedUrl, setSignedUrl] = useState('')
   useEffect(() => {
     if (recipe.file_path) {
-      // Signed URL
+      // Signed URL //Testing
       supabase
         .storage
         .from('recipe_images') // bucket name
