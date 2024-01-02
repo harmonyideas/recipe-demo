@@ -39,7 +39,7 @@ export default function Home({ recipes }) {
         <div result={result}><a href={`/recipes/${result.id}`}>{result.title} {
           signedUrl &&
           <div>
-            <img clasName="thumbnail" src={signedUrl} />
+            <img className="thumbnail" src={signedUrl} />
           </div>
         }</a></div>
       </div>
