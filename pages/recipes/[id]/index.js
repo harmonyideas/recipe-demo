@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase-client'
 
+
 export default function ViewRecipe({ recipe }) {
   const router = useRouter()
   const [signedUrl, setSignedUrl] = useState('')
   useEffect(() => {
     if (recipe.file_path) {
-
       // Signed URL
       supabase
         .storage
@@ -19,9 +19,8 @@ export default function ViewRecipe({ recipe }) {
         )
         .then(data => {
           if (data.error) {
-            // TODO: Handle error
+            console.log(error);
           }
-
           setSignedUrl(data.signedURL)
         })
     }
@@ -36,12 +35,12 @@ export default function ViewRecipe({ recipe }) {
       .publicURL
     :
     ''
-
   return (
     <>
       <h1>Recipe details</h1>
       <div className="container">
         <div className="row">
+<<<<<<< HEAD
           <div className="col-sm">
           <label>Created: {recipe.created_at}</label>
 
@@ -51,6 +50,36 @@ export default function ViewRecipe({ recipe }) {
 
           <label>Ingredients: {recipe.ingredients}</label>
 
+=======
+<<<<<<< HEAD
+          <div className="col-xs-1">
+            <label>Title: {recipe.title}</label>
+
+            <label>Description: {recipe.description}</label>
+
+            <label>Ingredients: {recipe.ingredients}</label>
+
+            <label>Instructions: {recipe.instructions}</label>
+
+            <label>Region: {recipe.region}</label>
+            {
+              signedUrl &&
+              <div>
+                <img src={signedUrl} />
+              </div>
+            }
+          </div>
+=======
+          <div className="col-sm">
+          <label>Created: {recipe.created_at}</label>
+
+          <label>Title: {recipe.title}</label>
+
+          <label>Description: {recipe.description}</label>
+
+          <label>Ingredients: {recipe.ingredients}</label>
+
+>>>>>>> dev
           <label>Instructions: {recipe.instructions}</label>
 
           <label>Region: {recipe.region}</label>
@@ -62,8 +91,9 @@ export default function ViewRecipe({ recipe }) {
         signedUrl &&
         <div>
           <img src={signedUrl} />
+>>>>>>> main
         </div>
-      }
+      </div>
 
       <div>
         <Link href={`/recipes/${recipe.id}/edit`}>
