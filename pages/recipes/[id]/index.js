@@ -40,7 +40,6 @@ export default function ViewRecipe({ recipe }) {
       <h1>Recipe details</h1>
       <div className="container">
         <div className="row">
-<<<<<<< HEAD
           <div className="col-xs-1">
             <label>Title: {recipe.title}</label>
 
@@ -58,28 +57,6 @@ export default function ViewRecipe({ recipe }) {
               </div>
             }
           </div>
-=======
-          <div className="col-sm">
-          <label>Created: {recipe.created_at}</label>
-
-          <label>Title: {recipe.title}</label>
-
-          <label>Description: {recipe.description}</label>
-
-          <label>Ingredients: {recipe.ingredients}</label>
-
-          <label>Instructions: {recipe.instructions}</label>
-
-          <label>Region: {recipe.region}</label>
-          </div>
-        </div>
-      </div>
-
-      {
-        signedUrl &&
-        <div>
-          <img src={signedUrl} />
->>>>>>> main
         </div>
       </div>
 
