@@ -1,4 +1,5 @@
 // Units for each ingredient type. "count" covers whole items like "2 eggs".
+// "custom" lets the user type their own unit, such as "clove" or "can".
 export const DRY_UNITS = [
   { value: 'g', label: 'grams (g)' },
   { value: 'oz', label: 'ounces (oz)' },
@@ -8,6 +9,7 @@ export const DRY_UNITS = [
   { value: 'tsp', label: 'teaspoon' },
   { value: 'pinch', label: 'pinch' },
   { value: 'count', label: 'whole / count' },
+  { value: 'custom', label: 'Custom…' },
 ]
 
 export const WET_UNITS = [
@@ -18,10 +20,22 @@ export const WET_UNITS = [
   { value: 'tbsp', label: 'tablespoon' },
   { value: 'tsp', label: 'teaspoon' },
   { value: 'count', label: 'whole / count' },
+  { value: 'custom', label: 'Custom…' },
 ]
 
 export function emptyIngredient() {
-  return { name: '', amount: '', unit: '', type: '' }
+  return { name: '', amount: '', unit: '', customUnit: '', type: '' }
+}
+
+const KNOWN_UNITS = [...DRY_UNITS, ...WET_UNITS].map((u) => u.value)
+
+// A stored unit that isn't in the lists is a custom unit
+function fromStored(r) {
+  const unit = r.unit ?? ''
+  if (unit === '' || KNOWN_UNITS.includes(unit)) {
+    return { name: r.name ?? '', amount: r.amount ?? '', unit, customUnit: '', type: r.type ?? '' }
+  }
+  return { name: r.name ?? '', amount: r.amount ?? '', unit: 'custom', customUnit: unit, type: r.type ?? '' }
 }
 
 // Returns the list of ingredients, or null if the stored value is not in the structured (JSON) format
@@ -30,12 +44,7 @@ export function parseStructuredIngredients(raw) {
   try {
     const list = JSON.parse(raw)
     if (!Array.isArray(list)) return null
-    return list.map((r) => ({
-      name: r.name ?? '',
-      amount: r.amount ?? '',
-      unit: r.unit ?? '',
-      type: r.type ?? '',
-    }))
+    return list.map(fromStored)
   } catch {
     return null
   }
@@ -57,7 +66,12 @@ export function ingredientRowsFor(raw) {
 export function serializeIngredients(rows) {
   return JSON.stringify(
     rows
-      .map((r) => ({ name: r.name.trim(), amount: r.amount.trim(), unit: r.unit, type: r.type }))
+      .map((r) => ({
+        name: r.name.trim(),
+        amount: r.amount.trim(),
+        unit: r.unit === 'custom' ? (r.customUnit ?? '').trim() : r.unit,
+        type: r.type,
+      }))
       .filter((r) => r.name !== '')
   )
 }

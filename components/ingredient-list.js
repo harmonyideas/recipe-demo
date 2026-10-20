@@ -65,6 +65,15 @@ export default function IngredientList({ value, onChange }) {
                   <option key={u.value} value={u.value}>{u.label}</option>
                 ))}
               </select>
+              {row.unit === 'custom' && (
+                <input
+                  className="form-control mt-1"
+                  placeholder="e.g. clove, can, handful"
+                  aria-label={`Ingredient ${i + 1} custom unit`}
+                  value={row.customUnit ?? ''}
+                  onChange={(e) => update(i, { customUnit: e.target.value })}
+                />
+              )}
             </div>
             <div className="col-md-1 text-end">
               <button
