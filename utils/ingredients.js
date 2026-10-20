@@ -1,30 +1,31 @@
 // Units for each ingredient type. "count" covers whole items like "2 eggs".
 // "custom" lets the user type their own unit, such as "clove" or "can".
 export const DRY_UNITS = [
-  { value: 'g', label: 'grams (g)' },
-  { value: 'oz', label: 'ounces (oz)' },
-  { value: 'lb', label: 'pounds (lb)' },
   { value: 'cup', label: 'cup' },
   { value: 'tbsp', label: 'tablespoon' },
   { value: 'tsp', label: 'teaspoon' },
+  { value: 'g', label: 'grams (g)' },
+  { value: 'oz', label: 'ounces (oz)' },
+  { value: 'lb', label: 'pounds (lb)' },
   { value: 'pinch', label: 'pinch' },
   { value: 'count', label: 'whole / count' },
   { value: 'custom', label: 'Custom…' },
 ]
 
 export const WET_UNITS = [
-  { value: 'ml', label: 'milliliters (ml)' },
-  { value: 'l', label: 'liters (l)' },
-  { value: 'fl oz', label: 'fluid ounces (fl oz)' },
   { value: 'cup', label: 'cup' },
   { value: 'tbsp', label: 'tablespoon' },
   { value: 'tsp', label: 'teaspoon' },
+  { value: 'ml', label: 'milliliters (ml)' },
+  { value: 'l', label: 'liters (l)' },
+  { value: 'fl oz', label: 'fluid ounces (fl oz)' },
   { value: 'count', label: 'whole / count' },
   { value: 'custom', label: 'Custom…' },
 ]
 
+// New rows start with the most common measurement: a dry cup
 export function emptyIngredient() {
-  return { name: '', amount: '', unit: '', customUnit: '', type: '' }
+  return { name: '', amount: '', unit: 'cup', customUnit: '', type: 'dry' }
 }
 
 const KNOWN_UNITS = [...DRY_UNITS, ...WET_UNITS].map((u) => u.value)
@@ -59,7 +60,7 @@ export function ingredientRowsFor(raw) {
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
-    .map((name) => ({ ...emptyIngredient(), name }))
+    .map((name) => ({ name, amount: '', unit: '', customUnit: '', type: '' }))
 }
 
 // Turns editor rows into the string saved in the recipes.ingredients column
