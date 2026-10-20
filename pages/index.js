@@ -1,5 +1,4 @@
 import { useRouter } from 'next/dist/client/router'
-import Link from 'next/link'
 import { supabase } from '../supabase-client'
 import { useEffect, useState } from 'react'
 import { useSession } from '../utils/user-context'

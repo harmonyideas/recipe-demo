@@ -46,7 +46,10 @@ export default function EditRecipe({ recipe }) {
             alert('Please sign in again before uploading an image.')
             return
           }
-          // Per-user folder plus a random name, so uploads never overwrite each other
+          // Per-user folder plus a random name, so uploads never overwrite each other.
+          // Replacing an image leaves the previous object in storage (orphaned).
+          // TODO: remove the old object from the recipe_images bucket once the
+          // recipe is saved. Not implemented yet, so storage will grow over time.
           const extension = imageFile.name.includes('.')
             ? imageFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '')
             : ''

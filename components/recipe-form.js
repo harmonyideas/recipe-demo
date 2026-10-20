@@ -69,6 +69,7 @@ export default function RecipeForm({
         <input
           name='recipe image'
           type='file'
+          accept="image/*"
           onChange={onRecipeImageChange}
         />
       </label>

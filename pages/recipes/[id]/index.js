@@ -26,15 +26,6 @@ export default function ViewRecipe({ recipe }) {
     }
   }, [recipe])
 
-  // Public URL
-  const recipeImageUrl = recipe.file_path ?
-    supabase
-      .storage
-      .from('recipe_images') // bucket name
-      .getPublicUrl(recipe.file_path) // path to the image in the bucket
-      .publicURL
-    :
-    ''
   return (
     <>
       <h1>Recipe details</h1>

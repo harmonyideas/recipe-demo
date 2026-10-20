@@ -130,6 +130,12 @@ When you start a Postgres database on Supabase, we populate it with an `auth` sc
 When a user logs in, they are issued a JWT with the role `authenticated` and thier UUID.
 We can use these details to provide fine-grained control over what each user can and cannot do.
 
+## Notes on uploads and requests
+
+- Recipe image input only accepts images (`accept="image/*"`). The client also checks the type and a 5 MB limit before uploading.
+- Replacing a recipe image uploads a new object and does not delete the old one. Old objects stay in the `recipe_images` bucket. Cleanup is a TODO in `pages/recipes/[id]/edit.js`.
+- `pages/api/auth.js` rejects requests (403) whose `Origin` header does not match the `Host` header. This is only a partial CSRF mitigation. Full protection needs SameSite cookies and CSRF tokens.
+
 ## Authors
 
 - [Supabase](https://supabase.io)
