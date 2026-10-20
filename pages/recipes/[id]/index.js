@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase-client'
 import Header from '../../../components/header'
+import IngredientsView from '../../../components/ingredients-view'
 
 
 export default function ViewRecipe({ recipe }) {
@@ -47,7 +48,7 @@ export default function ViewRecipe({ recipe }) {
                 <dd className="col-sm-9 pre-line">{recipe.description}</dd>
 
                 <dt className="col-sm-3 text-muted">Ingredients</dt>
-                <dd className="col-sm-9 pre-line">{recipe.ingredients}</dd>
+                <dd className="col-sm-9"><IngredientsView raw={recipe.ingredients} /></dd>
 
                 <dt className="col-sm-3 text-muted">Instructions</dt>
                 <dd className="col-sm-9 pre-line">{recipe.instructions}</dd>

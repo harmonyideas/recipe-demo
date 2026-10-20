@@ -3,13 +3,14 @@ import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import { supabase } from '../../../supabase-client';
 import RecipeForm from '../../../components/recipe-form';
+import { ingredientRowsFor, serializeIngredients } from '../../../utils/ingredients'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 export default function EditRecipe({ recipe }) {
   const [recipeTitle, setRecipeTitle] = useState(recipe.title)
   const [recipeDescription, setRecipeDescription] = useState(recipe.description)
-  const [recipeIngredients, setRecipeIngredients] = useState(recipe.ingredients)
+  const [recipeIngredients, setRecipeIngredients] = useState(() => ingredientRowsFor(recipe.ingredients))
   const [recipeInstructions, setRecipeInstructions] = useState(recipe.instructions)
   const [recipeRegion, setRecipeRegion] = useState(recipe.region)
   const [recipeImagePath, setRecipeImagePath] = useState(recipe.file_path)
@@ -26,7 +27,7 @@ export default function EditRecipe({ recipe }) {
         recipeDescription={recipeDescription}
         onDescriptionChange={(evt) => setRecipeDescription(evt.target.value)}
         recipeIngredients={recipeIngredients}
-        onIngredientsChange={(evt) => setRecipeIngredients(evt.target.value)}
+        onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
         onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
@@ -72,7 +73,7 @@ export default function EditRecipe({ recipe }) {
             .update({
               title: recipeTitle,
               description: recipeDescription,
-              ingredients: recipeIngredients,
+              ingredients: serializeIngredients(recipeIngredients),
               instructions: recipeInstructions,
               region: recipeRegion,
               file_path: recipeImagePath,

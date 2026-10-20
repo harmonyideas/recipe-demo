@@ -4,13 +4,14 @@ import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import RecipeForm from '../../components/recipe-form';
 import { supabase } from '../../supabase-client';
+import { serializeIngredients } from '../../utils/ingredients'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 export default function NewRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('')
   const [recipeDescription, setRecipeDescription] = useState('')
-  const [recipeIngredients, setRecipeIngredients] = useState('')
+  const [recipeIngredients, setRecipeIngredients] = useState([])
   const [recipeInstructions, setRecipeInstructions] = useState('')
   const [recipeRegion, setRecipeRegion] = useState('')
   const [recipeImagePath, setRecipeImagePath] = useState('')
@@ -28,7 +29,7 @@ export default function NewRecipe() {
         recipeDescription={recipeDescription}
         onDescriptionChange={(evt) => setRecipeDescription(evt.target.value)}
         recipeIngredients={recipeIngredients}
-        onIngredientsChange={(evt) => setRecipeIngredients(evt.target.value)}
+        onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
         onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
@@ -72,7 +73,7 @@ export default function NewRecipe() {
             .insert({
               title: recipeTitle,
               description: recipeDescription,
-              ingredients: recipeIngredients,
+              ingredients: serializeIngredients(recipeIngredients),
               instructions: recipeInstructions,
               region: recipeRegion,
               file_path: recipeImagePath,

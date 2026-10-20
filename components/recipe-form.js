@@ -1,3 +1,5 @@
+import IngredientList from './ingredient-list'
+
 export default function RecipeForm({
   recipeTitle,
   onTitleChange,
@@ -40,16 +42,7 @@ export default function RecipeForm({
       </div>
 
       <div className="mb-3">
-        <label htmlFor="ingredients" className="form-label">Ingredients</label>
-        <textarea
-          id="ingredients"
-          name='ingredients'
-          className="form-control"
-          rows={5}
-          value={recipeIngredients}
-          placeholder='Ingredients'
-          onChange={onIngredientsChange}
-        />
+        <IngredientList value={recipeIngredients} onChange={onIngredientsChange} />
       </div>
 
       <div className="mb-3">
