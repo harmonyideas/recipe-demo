@@ -57,15 +57,36 @@ CREATE TABLE recipes (
 );
 ```
 
-Execute SQL scripts
+Execute the SQL files in `sql/` in the SQL editor, in this order:
+
+1. `sql/recipes.sql` (the `CREATE TABLE` above)
+2. `sql/add_user_id_column.sql`
+3. `sql/add_file_path.sql`
+4. `sql/enable_rls.sql`
+5. `sql/create_rls_policies.sql` (recipe policies, shown below)
+6. `sql/create_recipe_images_storage_bucket.sql` (image bucket and storage policies, shown below)
+
+Recipe policies (`sql/create_rls_policies.sql`):
 
 ```
-ALTER TABLE recipes ADD COLUMN file_path TEXT NULL
+create policy "Recipes can only viewed by owner"
+  on recipes for select
+  using ( user_id = auth.uid() );
+
+create policy "Owner can create their own recipes"
+  on recipes for insert
+  with check ( auth.uid() = user_id );
+
+create policy "Owner can delete their own recipes"
+  on recipes for delete
+  using ( auth.uid() = user_id );
+
+create policy "Owner can update their own recipes"
+  on recipes for update
+  using ( auth.uid() = user_id );
 ```
 
-```
-alter table recipes add column user_id uuid references auth.users null;
-```
+Storage bucket and policies (`sql/create_recipe_images_storage_bucket.sql`):
 
 ```
 insert into storage.buckets (id, name)
@@ -75,6 +96,7 @@ values ('recipe_images', 'recipe_images');
 -- Policy that allows any authenticated user to view all recipe images
 create policy "Any authenticated user can view recipe images"
   on storage.objects for select
+  to authenticated
   using ( bucket_id = 'recipe_images' );
 
 -- Policy that allows the user that creates a recipe to upload an image for the recipe
@@ -93,26 +115,10 @@ create policy "User can update their own recipe image"
     and auth.uid() = owner
   );
 ```
-```
-create policy "Recipes can only viewed by owner"
-  on recipes for select
-  using ( user_id = auth.uid() );
-
-create policy "Owner can create their own recipes"
-  on recipes for insert
-  with check ( auth.uid() = user_id );
-
-create policy "Owner can update their own recipes"
-  on recipes for update
-  using ( auth.uid() = user_id );
-```
-```
-alter table recipes enable row level security;
-```
 
 
 ### 5. Run the application
-Initialize the app: `npm init`
+Install dependencies: `npm install`
 Run the application: `npm run dev`. Open your browser to `https://localhost:3000/` and you are ready to go 🚀.
 
 ## Supabase details
@@ -123,6 +129,12 @@ This project uses very high-level Authorization using Postgres' Role Level Secur
 When you start a Postgres database on Supabase, we populate it with an `auth` schema, and some helper functions.
 When a user logs in, they are issued a JWT with the role `authenticated` and thier UUID.
 We can use these details to provide fine-grained control over what each user can and cannot do.
+
+## Notes on uploads and requests
+
+- Recipe image input only accepts images (`accept="image/*"`). The client also checks the type and a 5 MB limit before uploading.
+- Replacing a recipe image uploads a new object and does not delete the old one. Old objects stay in the `recipe_images` bucket. Cleanup is a TODO in `pages/recipes/[id]/edit.js`.
+- `pages/api/auth.js` rejects requests (403) whose `Origin` header does not match the `Host` header. This is only a partial CSRF mitigation. Full protection needs SameSite cookies and CSRF tokens.
 
 ## Authors
 

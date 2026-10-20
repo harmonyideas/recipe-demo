@@ -1,53 +1,56 @@
 import { useRouter } from 'next/dist/client/router'
-import Link from 'next/link'
 import { supabase } from '../supabase-client'
 import { useEffect, useState } from 'react'
 import { useSession } from '../utils/user-context'
 import Header from '../components/header';
 
+function RecipeCard({ recipe }) {
+  const [signedUrl, setSignedUrl] = useState('')
+
+  useEffect(() => {
+    if (recipe.file_path) {
+      // Signed URL
+      supabase
+        .storage
+        .from('recipe_images') // bucket name
+        .createSignedUrl(
+          recipe.file_path, // path to the image in the bucket
+          36000, // time that the URL is valid in seconds
+        )
+        .then(data => {
+          if (data.error) {
+            console.log(data.error);
+          }
+          setSignedUrl(data.signedURL)
+        })
+    }
+  }, [recipe.file_path])
+
+  return (
+    <div className="col-md-3">
+      <div><a href={`/recipes/${recipe.id}`}>{recipe.title} {
+        signedUrl &&
+        <div>
+          <img className="thumbnail" src={signedUrl} />
+        </div>
+      }</a></div>
+    </div>
+  )
+}
+
 export default function Home({ recipes }) {
   const { session } = useSession()
   const router = useRouter()
 
-  let renderRows = [];
+  const renderRows = [];
 
-  recipes.forEach((result, i) => {
-    const [signedUrl, setSignedUrl] = useState('')
+  recipes.forEach((recipe, i) => {
+    // each card is its own component so its hooks run at the top level
+    renderRows.push(<RecipeCard key={`card-${recipe.id}`} recipe={recipe} />);
 
-    useEffect(() => {
-      if (result.file_path) {
-        // Signed URL
-        supabase
-          .storage
-          .from('recipe_images') // bucket name
-          .createSignedUrl(
-            result.file_path, // path to the image in the bucket
-            36000, // time that the URL is valid in seconds
-          )
-          .then(data => {
-            if (data.error) {
-              console.log(error);
-            }
-            setSignedUrl(data.signedURL)
-          })
-      }
-    }, [result])
-
-    // prepare the array for a 4 column layout
-    renderRows.push(
-      <div key={i} className="col-md-3">
-        <div result={result}><a href={`/recipes/${result.id}`}>{result.title} {
-          signedUrl &&
-          <div>
-            <img className="thumbnail" src={signedUrl} />
-          </div>
-        }</a></div>
-      </div>
-    );
-
-    // after four items add a new row 
+    // after four items add a new row
     if ((i + 1) % 4 === 0) {
-      renderRows.push(<div key={i + 1} className="row mt-3"></div>);
+      renderRows.push(<div key={`row-${i + 1}`} className="row mt-3"></div>);
     }
   });
 
@@ -67,9 +70,6 @@ export default function Home({ recipes }) {
           {
             session &&
             <>
-              <pre>Session data</pre>
-              <pre>Access token: {session.access_token}</pre>
-              <pre>Email: {session.user?.email}</pre>
               <button onClick={() => {
                 supabase.auth.signOut()
                 router.replace('/signin')

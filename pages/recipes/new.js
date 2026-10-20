@@ -3,6 +3,8 @@ import { useState } from 'react';
 import RecipeForm from '../../components/recipe-form';
 import { supabase } from '../../supabase-client';
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
 export default function NewRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('')
   const [recipeDescription, setRecipeDescription] = useState('')
@@ -27,21 +29,37 @@ export default function NewRecipe() {
         onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
         onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
-        onRecipeImageChange={(evt) => {
+        onRecipeImageChange={async (evt) => {
           const imageFile = evt.target.files[0]
-          const imagePath = `public/${imageFile.name}`
-          supabase.storage
+          if (!imageFile) return
+          if (!imageFile.type.startsWith('image/')) {
+            alert('Please choose an image file.')
+            evt.target.value = ''
+            return
+          }
+          if (imageFile.size > MAX_IMAGE_BYTES) {
+            alert('Image must be 5 MB or smaller.')
+            evt.target.value = ''
+            return
+          }
+          const userId = session?.user?.id
+          if (!userId) {
+            alert('Please sign in again before uploading an image.')
+            return
+          }
+          // Per-user folder plus a random name, so uploads never overwrite each other
+          const extension = imageFile.name.includes('.')
+            ? imageFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '')
+            : ''
+          const imagePath = `${userId}/${crypto.randomUUID()}${extension ? `.${extension}` : ''}`
+          const { error } = await supabase.storage
             .from('recipe_images') // bucket name
-            .upload(
-              imagePath,
-              imageFile,
-              { upsert: true })
-            .then(response => {
-              setRecipeImagePath(imagePath)
-            })
-            .catch(error => {
-              // TODO: show error message popup
-            })
+            .upload(imagePath, imageFile)
+          if (error) {
+            alert(`Image upload failed: ${error.message}`)
+            return
+          }
+          setRecipeImagePath(imagePath)
         }}
         onSubmit={async (evt) => {
           evt.preventDefault();

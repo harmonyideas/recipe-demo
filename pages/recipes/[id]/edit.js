@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { supabase } from '../../../supabase-client';
 import RecipeForm from '../../../components/recipe-form';
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
 export default function EditRecipe({ recipe }) {
   const [recipeTitle, setRecipeTitle] = useState(recipe.title)
   const [recipeDescription, setRecipeDescription] = useState(recipe.description)
@@ -26,21 +28,40 @@ export default function EditRecipe({ recipe }) {
         onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
         onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
-        onRecipeImageChange={(evt) => {
+        onRecipeImageChange={async (evt) => {
           const imageFile = evt.target.files[0]
-          const imagePath = `public/${imageFile.name}`
-          supabase.storage
+          if (!imageFile) return
+          if (!imageFile.type.startsWith('image/')) {
+            alert('Please choose an image file.')
+            evt.target.value = ''
+            return
+          }
+          if (imageFile.size > MAX_IMAGE_BYTES) {
+            alert('Image must be 5 MB or smaller.')
+            evt.target.value = ''
+            return
+          }
+          const userId = supabase.auth.user()?.id
+          if (!userId) {
+            alert('Please sign in again before uploading an image.')
+            return
+          }
+          // Per-user folder plus a random name, so uploads never overwrite each other.
+          // Replacing an image leaves the previous object in storage (orphaned).
+          // TODO: remove the old object from the recipe_images bucket once the
+          // recipe is saved. Not implemented yet, so storage will grow over time.
+          const extension = imageFile.name.includes('.')
+            ? imageFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '')
+            : ''
+          const imagePath = `${userId}/${crypto.randomUUID()}${extension ? `.${extension}` : ''}`
+          const { error } = await supabase.storage
             .from('recipe_images')
-            .upload(
-              imagePath,
-              imageFile,
-              { upsert: true })
-            .then(response => {
-              setRecipeImagePath(imagePath)
-            })
-            .catch(error => {
-              // TODO: show error message popup
-            })
+            .upload(imagePath, imageFile)
+          if (error) {
+            alert(`Image upload failed: ${error.message}`)
+            return
+          }
+          setRecipeImagePath(imagePath)
         }}
         onSubmit={async (evt) => {
           evt.preventDefault();

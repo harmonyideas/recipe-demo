@@ -6,6 +6,7 @@ values ('recipe_images', 'recipe_images');
 -- Policy that allows any authenticated user to view all recipe images
 create policy "Any authenticated user can view recipe images"
   on storage.objects for select
+  to authenticated
   using ( bucket_id = 'recipe_images' );
 
 -- Policy that allows the user that creates a recipe to upload an image for the recipe
