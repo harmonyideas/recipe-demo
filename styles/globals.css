@@ -107,6 +107,31 @@ a {
   object-fit: cover;
 }
 
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    border: none;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .detail-image {
+    max-height: 250px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
 .pre-line {
   white-space: pre-line;
 }

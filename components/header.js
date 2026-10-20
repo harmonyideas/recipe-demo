@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand border-bottom shadow-sm">
+    <nav className="navbar navbar-expand border-bottom shadow-sm no-print">
       <div className="container">
         <Link href='/'>
           <a className="navbar-brand">Recipes</a>

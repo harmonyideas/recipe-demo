@@ -57,10 +57,13 @@ export default function ViewRecipe({ recipe }) {
               </dl>
             </div>
 
-            <div className="d-flex gap-2 mt-3">
+            <div className="d-flex gap-2 mt-3 no-print">
               <Link href={`/recipes/${recipe.id}/edit`}>
                 <a className='btn btn-outline-primary'>Edit recipe</a>
               </Link>
+              <button className="btn btn-outline-secondary" onClick={() => window.print()}>
+                Print recipe
+              </button>
               <button className="btn btn-outline-danger" onClick={async (evt) => {
                 const { error } = await supabase
                   .from('recipes')
