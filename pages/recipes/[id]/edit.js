@@ -1,3 +1,4 @@
+import { getRequestUser, serverClientFor } from '../../../utils/server-client'
 import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import { supabase } from '../../../supabase-client';
@@ -41,7 +42,8 @@ export default function EditRecipe({ recipe }) {
             evt.target.value = ''
             return
           }
-          const userId = supabase.auth.user()?.id
+          const { data: { user } } = await supabase.auth.getUser()
+          const userId = user?.id
           if (!userId) {
             alert('Please sign in again before uploading an image.')
             return
@@ -105,7 +107,7 @@ export default function EditRecipe({ recipe }) {
 
 export const getServerSideProps = async (context) => {
   // get the user using the "sb:token" cookie
-  const { user } = await supabase.auth.api.getUserByCookie(context.req)
+  const { user, token } = await getRequestUser(context.req)
   if (!user) {
     return {
       redirect: {
@@ -115,8 +117,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  supabase.auth.setAuth(context.req.cookies["sb:token"])
-  const { data: recipe, error } = await supabase
+  const { data: recipe, error } = await serverClientFor(token)
     .from('recipes')
     .select('*')
     .eq('id', context.query.id)

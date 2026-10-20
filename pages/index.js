@@ -1,3 +1,4 @@
+import { getRequestUser, serverClientFor } from '../utils/server-client'
 import { useRouter } from 'next/dist/client/router'
 import { supabase } from '../supabase-client'
 import { useEffect, useState } from 'react'
@@ -17,11 +18,11 @@ function RecipeCard({ recipe }) {
           recipe.file_path, // path to the image in the bucket
           36000, // time that the URL is valid in seconds
         )
-        .then(data => {
-          if (data.error) {
-            console.log(data.error);
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
           }
-          setSignedUrl(data.signedURL)
+          setSignedUrl(data?.signedUrl ?? '')
         })
     }
   }, [recipe.file_path])
@@ -84,7 +85,7 @@ export default function Home({ recipes }) {
 
 export const getServerSideProps = async (context) => {
   // get the user using the "sb:token" cookie
-  const { user } = await supabase.auth.api.getUserByCookie(context.req)
+  const { user, token } = await getRequestUser(context.req)
   if (!user) {
     return {
       redirect: {
@@ -95,8 +96,7 @@ export const getServerSideProps = async (context) => {
   }
 
   // Query all recipes
-  supabase.auth.setAuth(context.req.cookies['sb:token'])
-  const { data: recipes, error } = await supabase.from('recipes').select();
+  const { data: recipes, error } = await serverClientFor(token).from('recipes').select();
 
   if (error) {
     // Return 404 response.

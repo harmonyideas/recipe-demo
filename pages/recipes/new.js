@@ -1,3 +1,5 @@
+import { useSession } from '../../utils/user-context'
+import { getRequestUser, serverClientFor } from '../../utils/server-client'
 import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import RecipeForm from '../../components/recipe-form';
@@ -13,7 +15,7 @@ export default function NewRecipe() {
   const [recipeRegion, setRecipeRegion] = useState('')
   const [recipeImagePath, setRecipeImagePath] = useState('')
   const router = useRouter();
-  const session = supabase.auth.session();
+  const session = useSession()?.session;
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function NewRecipe() {
 
 export const getServerSideProps = async (context) => {
   // get the user using the "sb:token" cookie
-  const { user } = await supabase.auth.api.getUserByCookie(context.req)
+  const { user, token } = await getRequestUser(context.req)
   if (!user) {
     return {
       redirect: {
