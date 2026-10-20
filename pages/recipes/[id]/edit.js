@@ -47,9 +47,7 @@ export default function EditRecipe({ recipe }) {
             return
           }
           // Per-user folder plus a random name, so uploads never overwrite each other.
-          // Replacing an image leaves the previous object in storage (orphaned).
-          // TODO: remove the old object from the recipe_images bucket once the
-          // recipe is saved. Not implemented yet, so storage will grow over time.
+          // The previous image is removed only after the recipe is saved (see onSubmit).
           const extension = imageFile.name.includes('.')
             ? imageFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '')
             : ''
@@ -65,7 +63,7 @@ export default function EditRecipe({ recipe }) {
         }}
         onSubmit={async (evt) => {
           evt.preventDefault();
-          await supabase
+          const { error } = await supabase
             .from('recipes')
             .update({
               title: recipeTitle,
@@ -78,6 +76,25 @@ export default function EditRecipe({ recipe }) {
             .match({
               id: recipe.id,
             });
+
+          if (error) {
+            alert(`Could not save the recipe: ${error.message}`)
+            // No recipe points at the image we just uploaded, so remove it.
+            if (recipeImagePath !== recipe.file_path) {
+              await supabase.storage.from('recipe_images').remove([recipeImagePath])
+            }
+            return
+          }
+
+          // The recipe now uses the new image, so the previous one is no longer referenced.
+          if (recipe.file_path && recipe.file_path !== recipeImagePath) {
+            const { error: removeError } = await supabase.storage
+              .from('recipe_images')
+              .remove([recipe.file_path])
+            if (removeError) {
+              console.error('Could not remove the old recipe image:', removeError.message)
+            }
+          }
 
           router.push('/')
         }}

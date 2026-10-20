@@ -114,6 +114,14 @@ create policy "User can update their own recipe image"
     bucket_id = 'recipe_images'
     and auth.uid() = owner
   );
+-- Policy that allows the user that first uploaded an image (owner) to delete it,
+-- so the app can remove old images when a recipe's image is replaced or the recipe is deleted
+create policy "User can delete their own recipe image"
+  on storage.objects for delete
+  using (
+    bucket_id = 'recipe_images'
+    and auth.uid() = owner
+  );
 ```
 
 
