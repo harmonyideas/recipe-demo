@@ -19,7 +19,7 @@ export default function ViewRecipe({ recipe }) {
         )
         .then(data => {
           if (data.error) {
-            console.log(error);
+            console.log(data.error);
           }
           setSignedUrl(data.signedURL)
         })
