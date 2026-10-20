@@ -62,9 +62,10 @@ Execute the SQL files in `sql/` in the SQL editor, in this order:
 1. `sql/recipes.sql` (the `CREATE TABLE` above)
 2. `sql/add_user_id_column.sql`
 3. `sql/add_file_path.sql`
-4. `sql/enable_rls.sql`
-5. `sql/create_rls_policies.sql` (recipe policies, shown below)
-6. `sql/create_recipe_images_storage_bucket.sql` (image bucket and storage policies, shown below)
+4. `sql/add_description_column.sql`
+5. `sql/enable_rls.sql`
+6. `sql/create_rls_policies.sql` (recipe policies, shown below)
+7. `sql/create_recipe_images_storage_bucket.sql` (image bucket and storage policies, shown below)
 
 Recipe policies (`sql/create_rls_policies.sql`):
 
@@ -110,6 +111,14 @@ create policy "User can upload their own recipe image"
 -- Policy that allows the user that first uploaded an image (owner) to update the image
 create policy "User can update their own recipe image"
   on storage.objects for update
+  using (
+    bucket_id = 'recipe_images'
+    and auth.uid() = owner
+  );
+-- Policy that allows the user that first uploaded an image (owner) to delete it,
+-- so the app can remove old images when a recipe's image is replaced or the recipe is deleted
+create policy "User can delete their own recipe image"
+  on storage.objects for delete
   using (
     bucket_id = 'recipe_images'
     and auth.uid() = owner

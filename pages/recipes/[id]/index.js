@@ -56,11 +56,22 @@ export default function ViewRecipe({ recipe }) {
           <a className='button'>Edit recipe</a>
         </Link>
         <button onClick={async (evt) => {
-          const error = await supabase
+          const { error } = await supabase
             .from('recipes')
             .delete()
             .eq('id', recipe.id)
-          console.log(error);
+          if (error) {
+            alert(`Could not delete the recipe: ${error.message}`)
+            return
+          }
+          if (recipe.file_path) {
+            const { error: removeError } = await supabase.storage
+              .from('recipe_images')
+              .remove([recipe.file_path])
+            if (removeError) {
+              console.error('Could not remove the recipe image:', removeError.message)
+            }
+          }
           router.replace('/')
         }}>Delete recipe</button>
       </div>
