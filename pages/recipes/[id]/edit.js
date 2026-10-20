@@ -16,8 +16,10 @@ export default function EditRecipe({ recipe }) {
   const router = useRouter();
 
   return (
-    <>
-      <h1>Edit recipe</h1>
+    <main className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <h2 className="mb-4">Edit recipe</h2>
       <RecipeForm
         recipeTitle={recipeTitle}
         onTitleChange={(evt) => setRecipeTitle(evt.target.value)}
@@ -101,7 +103,9 @@ export default function EditRecipe({ recipe }) {
           router.push('/')
         }}
       />
-    </>
+        </div>
+      </div>
+    </main>
   )
 }
 

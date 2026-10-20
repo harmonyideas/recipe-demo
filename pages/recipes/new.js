@@ -18,8 +18,10 @@ export default function NewRecipe() {
   const session = useSession()?.session;
 
   return (
-    <>
-      <h1>Create new recipe</h1>
+    <main className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <h2 className="mb-4">Create new recipe</h2>
       <RecipeForm
         recipeTitle={recipeTitle}
         onTitleChange={(evt) => setRecipeTitle(evt.target.value)}
@@ -80,7 +82,9 @@ export default function NewRecipe() {
           router.push('/')
         }}
       />
-    </>
+        </div>
+      </div>
+    </main>
   )
 }
 

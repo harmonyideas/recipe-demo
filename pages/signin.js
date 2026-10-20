@@ -22,8 +22,8 @@ export default function Signin() {
   }
 
   return (
-    <>
-      <h1>Sign in</h1>
+    <main className="container py-5">
+      <h1 className="h3 text-center mb-4">Sign in</h1>
       <AuthForm
         email={email}
         onEmailChange={(evt) => setEmail(evt.target.value)}
@@ -32,10 +32,12 @@ export default function Signin() {
         onSubmit={submitForm}
       />
 
-      <Link href='/signup'>
-        <a>Sign up</a>
-      </Link>
-    </>
+      <p className="text-center mt-3 mb-0">
+        <Link href='/signup'>
+          <a>Don&apos;t have an account? Sign up</a>
+        </Link>
+      </p>
+    </main>
   )
 }
 

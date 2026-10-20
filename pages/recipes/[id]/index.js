@@ -3,6 +3,7 @@ import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase-client'
+import Header from '../../../components/header'
 
 
 export default function ViewRecipe({ recipe }) {
@@ -29,53 +30,60 @@ export default function ViewRecipe({ recipe }) {
 
   return (
     <>
-      <h1>Recipe details</h1>
-      <div className="container">
-        <div className="row">
-          <div className="col-xs-1">
-            <label>Title: {recipe.title}</label>
+      <Header />
+      <main className="container py-4">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="card card-body shadow-sm">
+              <h2 className="mb-3">{recipe.title}</h2>
 
-            <label>Description: {recipe.description}</label>
+              {
+                signedUrl &&
+                <img src={signedUrl} className="detail-image mb-4" alt={recipe.title} />
+              }
 
-            <label>Ingredients: {recipe.ingredients}</label>
+              <dl className="row mb-0">
+                <dt className="col-sm-3 text-muted">Description</dt>
+                <dd className="col-sm-9 pre-line">{recipe.description}</dd>
 
-            <label>Instructions: {recipe.instructions}</label>
+                <dt className="col-sm-3 text-muted">Ingredients</dt>
+                <dd className="col-sm-9 pre-line">{recipe.ingredients}</dd>
 
-            <label>Region: {recipe.region}</label>
-            {
-              signedUrl &&
-              <div>
-                <img src={signedUrl} />
-              </div>
-            }
+                <dt className="col-sm-3 text-muted">Instructions</dt>
+                <dd className="col-sm-9 pre-line">{recipe.instructions}</dd>
+
+                <dt className="col-sm-3 text-muted">Region</dt>
+                <dd className="col-sm-9">{recipe.region}</dd>
+              </dl>
+            </div>
+
+            <div className="d-flex gap-2 mt-3">
+              <Link href={`/recipes/${recipe.id}/edit`}>
+                <a className='btn btn-outline-primary'>Edit recipe</a>
+              </Link>
+              <button className="btn btn-outline-danger" onClick={async (evt) => {
+                const { error } = await supabase
+                  .from('recipes')
+                  .delete()
+                  .eq('id', recipe.id)
+                if (error) {
+                  alert(`Could not delete the recipe: ${error.message}`)
+                  return
+                }
+                if (recipe.file_path) {
+                  const { error: removeError } = await supabase.storage
+                    .from('recipe_images')
+                    .remove([recipe.file_path])
+                  if (removeError) {
+                    console.error('Could not remove the recipe image:', removeError.message)
+                  }
+                }
+                router.replace('/')
+              }}>Delete recipe</button>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div>
-        <Link href={`/recipes/${recipe.id}/edit`}>
-          <a className='button'>Edit recipe</a>
-        </Link>
-        <button onClick={async (evt) => {
-          const { error } = await supabase
-            .from('recipes')
-            .delete()
-            .eq('id', recipe.id)
-          if (error) {
-            alert(`Could not delete the recipe: ${error.message}`)
-            return
-          }
-          if (recipe.file_path) {
-            const { error: removeError } = await supabase.storage
-              .from('recipe_images')
-              .remove([recipe.file_path])
-            if (removeError) {
-              console.error('Could not remove the recipe image:', removeError.message)
-            }
-          }
-          router.replace('/')
-        }}>Delete recipe</button>
-      </div>
+      </main>
     </>
   )
 }
