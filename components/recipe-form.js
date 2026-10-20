@@ -1,3 +1,5 @@
+import IngredientList from './ingredient-list'
+
 export default function RecipeForm({
   recipeTitle,
   onTitleChange,
@@ -13,68 +15,77 @@ export default function RecipeForm({
   onSubmit
 }) {
   return (
-    <form onSubmit={onSubmit}>
-      <div>
-      <label>Title
+    <form onSubmit={onSubmit} className="card card-body shadow-sm">
+      <div className="mb-3">
+        <label htmlFor="title" className="form-label">Title</label>
         <input
+          id="title"
           name='title'
+          className="form-control"
           value={recipeTitle}
           placeholder='Title'
           onChange={onTitleChange}
         />
-      </label>
       </div>
-      <div>
-      <label>Description
+
+      <div className="mb-3">
+        <label htmlFor="description" className="form-label">Description</label>
         <textarea
+          id="description"
           name='description'
+          className="form-control"
+          rows={3}
           value={recipeDescription}
           placeholder='Description'
           onChange={onDescriptionChange}
         />
-      </label>
       </div>
-      <div>
-      <label>Ingredients
-        <textarea
-          name='ingredients'
-          value={recipeIngredients}
-          placeholder='Ingredients'
-          onChange={onIngredientsChange}
-        />
-      </label>
+
+      <div className="mb-3">
+        <IngredientList value={recipeIngredients} onChange={onIngredientsChange} />
       </div>
-      <div>
-      <label>Instructions
+
+      <div className="mb-3">
+        <label htmlFor="instructions" className="form-label">Instructions</label>
         <textarea
+          id="instructions"
           name='instructions'
+          className="form-control"
+          rows={6}
           value={recipeInstructions}
           placeholder='Instructions'
           onChange={onInstructionsChange}
         />
-      </label>
       </div>
-      <div>
-      <label>Recipe region
+
+      <div className="mb-3">
+        <label htmlFor="region" className="form-label">Recipe region</label>
         <input
+          id="region"
           name='region'
+          className="form-control"
           value={recipeRegion}
           placeholder='Region'
           onChange={onRegionChange}
         />
-      </label>
       </div>
 
-      <label>Recipe image
+      <div className="mb-4">
+        <label htmlFor="recipe-image" className="form-label">Recipe image</label>
         <input
+          id="recipe-image"
           name='recipe image'
           type='file'
           accept="image/*"
+          className="form-control"
           onChange={onRecipeImageChange}
         />
-      </label>
+        <div className="form-text">Image up to 5 MB.</div>
+      </div>
 
-      <button type='submit'>Save recipe</button>
+      <div>
+        <button type='submit' className="btn btn-primary px-4">Save recipe</button>
+      </div>
     </form>
   )
 }

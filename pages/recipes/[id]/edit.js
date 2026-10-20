@@ -1,29 +1,33 @@
+import { getRequestUser, serverClientFor } from '../../../utils/server-client'
 import { useRouter } from 'next/dist/client/router';
 import { useState } from 'react';
 import { supabase } from '../../../supabase-client';
 import RecipeForm from '../../../components/recipe-form';
+import { ingredientRowsFor, serializeIngredients } from '../../../utils/ingredients'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 export default function EditRecipe({ recipe }) {
   const [recipeTitle, setRecipeTitle] = useState(recipe.title)
   const [recipeDescription, setRecipeDescription] = useState(recipe.description)
-  const [recipeIngredients, setRecipeIngredients] = useState(recipe.ingredients)
+  const [recipeIngredients, setRecipeIngredients] = useState(() => ingredientRowsFor(recipe.ingredients))
   const [recipeInstructions, setRecipeInstructions] = useState(recipe.instructions)
   const [recipeRegion, setRecipeRegion] = useState(recipe.region)
   const [recipeImagePath, setRecipeImagePath] = useState(recipe.file_path)
   const router = useRouter();
 
   return (
-    <>
-      <h1>Edit recipe</h1>
+    <main className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <h2 className="mb-4">Edit recipe</h2>
       <RecipeForm
         recipeTitle={recipeTitle}
         onTitleChange={(evt) => setRecipeTitle(evt.target.value)}
         recipeDescription={recipeDescription}
         onDescriptionChange={(evt) => setRecipeDescription(evt.target.value)}
         recipeIngredients={recipeIngredients}
-        onIngredientsChange={(evt) => setRecipeIngredients(evt.target.value)}
+        onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
         onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
         recipeRegion={recipeRegion}
@@ -41,7 +45,8 @@ export default function EditRecipe({ recipe }) {
             evt.target.value = ''
             return
           }
-          const userId = supabase.auth.user()?.id
+          const { data: { user } } = await supabase.auth.getUser()
+          const userId = user?.id
           if (!userId) {
             alert('Please sign in again before uploading an image.')
             return
@@ -68,7 +73,7 @@ export default function EditRecipe({ recipe }) {
             .update({
               title: recipeTitle,
               description: recipeDescription,
-              ingredients: recipeIngredients,
+              ingredients: serializeIngredients(recipeIngredients),
               instructions: recipeInstructions,
               region: recipeRegion,
               file_path: recipeImagePath,
@@ -99,13 +104,15 @@ export default function EditRecipe({ recipe }) {
           router.push('/')
         }}
       />
-    </>
+        </div>
+      </div>
+    </main>
   )
 }
 
 export const getServerSideProps = async (context) => {
   // get the user using the "sb:token" cookie
-  const { user } = await supabase.auth.api.getUserByCookie(context.req)
+  const { user, token } = await getRequestUser(context.req)
   if (!user) {
     return {
       redirect: {
@@ -115,8 +122,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  supabase.auth.setAuth(context.req.cookies["sb:token"])
-  const { data: recipe, error } = await supabase
+  const { data: recipe, error } = await serverClientFor(token)
     .from('recipes')
     .select('*')
     .eq('id', context.query.id)

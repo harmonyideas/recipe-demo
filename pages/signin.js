@@ -1,3 +1,4 @@
+import { getRequestUser } from '../utils/server-client'
 import { useState } from 'react'
 import { supabase } from '../supabase-client'
 import AuthForm from '../components/auth-form'
@@ -10,7 +11,7 @@ export default function Signin() {
   const router = useRouter()
   const submitForm = async (evt) => {
     evt.preventDefault()
-    const { data, error } = await supabase.auth.signIn({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -21,8 +22,8 @@ export default function Signin() {
   }
 
   return (
-    <>
-      <h1>Sign in</h1>
+    <main className="container py-5">
+      <h1 className="h3 text-center mb-4">Sign in</h1>
       <AuthForm
         email={email}
         onEmailChange={(evt) => setEmail(evt.target.value)}
@@ -31,16 +32,18 @@ export default function Signin() {
         onSubmit={submitForm}
       />
 
-      <Link href='/signup'>
-        <a>Sign up</a>
-      </Link>
-    </>
+      <p className="text-center mt-3 mb-0">
+        <Link href='/signup'>
+          <a>Don&apos;t have an account? Sign up</a>
+        </Link>
+      </p>
+    </main>
   )
 }
 
 export const getServerSideProps = async (context) => {
   // get the user using the "sb:token" cookie
-  const { user } = await supabase.auth.api.getUserByCookie(context.req)
+  const { user } = await getRequestUser(context.req)
   if (user) {
     return {
       redirect: {

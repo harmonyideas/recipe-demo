@@ -12,8 +12,7 @@ export function UserContextProvider(props) {
   const [session, setSession] = useState(null)
 
   useEffect(() => {
-    const session = supabase.auth.session();
-    setSession(session);
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
 
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session)
@@ -27,7 +26,7 @@ export function UserContextProvider(props) {
     });
 
     return () => {
-      authListener?.unsubscribe();
+      authListener?.subscription?.unsubscribe();
     };
   }, []);
 

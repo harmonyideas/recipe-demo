@@ -1,4 +1,3 @@
-import { supabase } from '../../supabase-client'
 
 // Partial CSRF mitigation: if the browser sent an Origin header, it must match
 // the Host header, otherwise the request came from another site and is rejected.
@@ -33,5 +32,15 @@ export default function AuthHandler(req, res) {
     }
   }
 
-  supabase.auth.api.setAuthCookie(req, res)
+  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''
+  if (event === 'SIGNED_OUT') {
+    res.setHeader('Set-Cookie', `sb:token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${secure}`)
+  } else {
+    const maxAge = Number(session.expires_in) > 0 ? Number(session.expires_in) : 3600
+    res.setHeader(
+      'Set-Cookie',
+      `sb:token=${encodeURIComponent(session.access_token)}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Lax${secure}`
+    )
+  }
+  return res.status(200).json({ ok: true })
 }
