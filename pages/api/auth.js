@@ -13,6 +13,12 @@ function isSameOrigin(req) {
   }
 }
 
+function isHttps(req) {
+  if (req.socket?.encrypted) return true
+  const forwarded = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim()
+  return forwarded === 'https'
+}
+
 export default function AuthHandler(req, res) {
   if (!isSameOrigin(req)) {
     return res.status(403).json({ error: 'Cross-origin request rejected' })
@@ -32,7 +38,10 @@ export default function AuthHandler(req, res) {
     }
   }
 
-  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''
+  // Mark the cookie Secure only when the request really came over HTTPS (directly
+  // or via a proxy). Browsers silently drop Secure cookies set over plain HTTP,
+  // which would make sign-in appear to do nothing.
+  const secure = isHttps(req) ? '; Secure' : ''
   if (event === 'SIGNED_OUT') {
     res.setHeader('Set-Cookie', `sb:token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${secure}`)
   } else {

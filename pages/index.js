@@ -5,6 +5,7 @@ import { supabase } from '../supabase-client'
 import { useEffect, useState } from 'react'
 import { useSession } from '../utils/user-context'
 import Header from '../components/header';
+import { syncAuthCookie } from '../utils/auth-cookie'
 
 function RecipeCard({ recipe }) {
   const [signedUrl, setSignedUrl] = useState('')
@@ -71,8 +72,11 @@ export default function Home({ recipes }) {
       <footer className="container pb-4 text-end">
         {
           session &&
-          <button className="btn btn-outline-secondary btn-sm" onClick={() => {
-            supabase.auth.signOut()
+          <button className="btn btn-outline-secondary btn-sm" onClick={async () => {
+            // Clear the server cookie before going to /signin; otherwise its
+            // getServerSideProps still sees the user and sends them back here.
+            await supabase.auth.signOut().catch(() => {})
+            await syncAuthCookie('SIGNED_OUT', null).catch(() => {})
             router.replace('/signin')
           }}>Sign out</button>
         }
