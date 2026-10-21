@@ -9,6 +9,24 @@ This demonstrates how to use:
 - Public profiles restricted with [Policies](https://supabase.io/docs/guides/auth#policies).
 - Frontend using [Next.js](<[nextjs.org/](https://nextjs.org/)>).
 
+## Screenshots
+
+All recipes, as cards you click to open:
+
+![All recipes](docs/screenshots/recipes.png)
+
+A recipe, with ingredients marked dry or wet, and buttons to edit, print or delete it:
+
+![Recipe detail](docs/screenshots/recipe-detail.png)
+
+Adding or editing a recipe. Each ingredient has an amount, a dry/wet type and a unit, including custom units such as "clove":
+
+![Edit recipe](docs/screenshots/recipe-edit.png)
+
+Sign in:
+
+![Sign in](docs/screenshots/signin.png)
+
 ## Technologies used
 
 - Frontend:

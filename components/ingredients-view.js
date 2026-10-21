@@ -1,5 +1,13 @@
 import { parseStructuredIngredients } from '../utils/ingredients'
 
+// "count" items read naturally without a unit ("2 eggs"), and custom units
+// such as "clove" are stored in customUnit rather than unit
+function displayUnit(r) {
+  if (r.unit === 'count') return ''
+  if (r.unit === 'custom') return r.customUnit
+  return r.unit
+}
+
 export default function IngredientsView({ raw }) {
   const rows = parseStructuredIngredients(raw)
 
@@ -11,7 +19,7 @@ export default function IngredientsView({ raw }) {
     <ul className="list-unstyled mb-0">
       {rows.map((r, i) => (
         <li key={i} className="mb-1">
-          {[r.amount, r.unit === 'count' ? '' : r.unit, r.name].filter(Boolean).join(' ')}
+          {[r.amount, displayUnit(r), r.name].filter(Boolean).join(' ')}
           {r.type && (
             <span className={`badge ms-2 ${r.type === 'wet' ? 'text-bg-info' : 'text-bg-warning'}`}>
               {r.type === 'wet' ? 'Wet' : 'Dry'}
