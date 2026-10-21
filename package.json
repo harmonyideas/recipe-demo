@@ -1,6 +1,9 @@
 {
   "name": "nextjs-supabase-crud",
   "private": true,
+  "engines": {
+    "node": "26.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

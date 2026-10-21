@@ -127,6 +127,8 @@ create policy "User can delete their own recipe image"
 
 
 ### 5. Run the application
+This project builds and runs on Node.js 26 (pinned in `.nvmrc`, `.node-version` and `engines` in `package.json`). With nvm, run `nvm use` in this folder first.
+
 Install dependencies: `npm install`
 Run the application: `npm run dev`. Open your browser to `https://localhost:3000/` and you are ready to go 🚀.
 
