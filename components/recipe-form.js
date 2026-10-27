@@ -10,8 +10,6 @@ export default function RecipeForm({
   onIngredientsChange,
   recipeInstructions,
   onInstructionsChange,
-  recipeRegion,
-  onRegionChange,
   onRecipeImageChange,
   onSubmit
 }) {
@@ -48,18 +46,6 @@ export default function RecipeForm({
 
       <div className="mb-3">
         <StepList value={recipeInstructions} onChange={onInstructionsChange} />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="region" className="form-label">Recipe region</label>
-        <input
-          id="region"
-          name='region'
-          className="form-control"
-          value={recipeRegion}
-          placeholder='Region'
-          onChange={onRegionChange}
-        />
       </div>
 
       <div className="mb-4">

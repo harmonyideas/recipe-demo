@@ -36,7 +36,7 @@ function RecipeCard({ recipe }) {
           {signedUrl && <img src={signedUrl} className="card-img-top recipe-thumb" alt={recipe.title} />}
           <div className="card-body">
             <h5 className="card-title mb-1">{recipe.title}</h5>
-            {recipe.region && <p className="card-text text-muted small mb-0">{recipe.region}</p>}
+            {recipe.description && <p className="card-text text-muted small mb-0 card-summary">{recipe.description}</p>}
           </div>
         </div>
       </a>

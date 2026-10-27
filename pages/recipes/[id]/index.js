@@ -50,9 +50,6 @@ export default function ViewRecipe({ recipe }) {
 
                 <dt className="col-sm-3 text-muted">Ingredients</dt>
                 <dd className="col-sm-9"><IngredientsView raw={recipe.ingredients} /></dd>
-
-                <dt className="col-sm-3 text-muted">Region</dt>
-                <dd className="col-sm-9">{recipe.region}</dd>
               </dl>
 
               <h3 className="h5 mt-4 mb-3">Instructions</h3>

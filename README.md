@@ -10,8 +10,8 @@ A recipe manager built with Next.js and Supabase. Each person signs up, signs in
 - Every recipe belongs to the person who created it. Postgres row level security means nobody else can see, change or delete it.
 
 **Recipes**
-- All your recipes shown as cards with a photo, title and region. Click a card to open the recipe.
-- Create, edit and delete recipes, each with a title, description, region and photo.
+- All your recipes shown as cards with a photo, title and the start of the description. Click a card to open the recipe.
+- Create, edit and delete recipes, each with a title, description and photo.
 - **Photos** are stored in [Supabase Storage](https://supabase.com/docs/guides/storage). Only image files up to 5 MB are accepted. Each upload gets a unique name, and the old photo is removed when it is replaced or its recipe is deleted.
 - **Print** a recipe from its page. Buttons and navigation are left out of the printout, and step numbers print cleanly in black and white.
 
@@ -111,7 +111,7 @@ CREATE TABLE recipes (
 );
 ```
 
-The later files add `user_id`, `file_path` (the photo's path in storage) and `description` columns.
+The later files add `user_id`, `file_path` (the photo's path in storage) and `description` columns. The `region` column is no longer used by the app; it is kept so existing databases keep working, and can be dropped with `alter table recipes drop column region;` if you like.
 
 Ingredients and instructions are stored as JSON in their text columns, so no extra tables are needed:
 

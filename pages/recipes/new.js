@@ -14,7 +14,6 @@ export default function NewRecipe() {
   const [recipeDescription, setRecipeDescription] = useState('')
   const [recipeIngredients, setRecipeIngredients] = useState([])
   const [recipeInstructions, setRecipeInstructions] = useState([''])
-  const [recipeRegion, setRecipeRegion] = useState('')
   const [recipeImagePath, setRecipeImagePath] = useState('')
   const router = useRouter();
   const session = useSession()?.session;
@@ -33,8 +32,6 @@ export default function NewRecipe() {
         onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
         onInstructionsChange={setRecipeInstructions}
-        recipeRegion={recipeRegion}
-        onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
         onRecipeImageChange={async (evt) => {
           const imageFile = evt.target.files[0]
           if (!imageFile) return
@@ -76,7 +73,6 @@ export default function NewRecipe() {
               description: recipeDescription,
               ingredients: serializeIngredients(recipeIngredients),
               instructions: serializeSteps(recipeInstructions),
-              region: recipeRegion,
               file_path: recipeImagePath,
               user_id: session.user.id,
             });

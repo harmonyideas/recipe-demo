@@ -13,7 +13,6 @@ export default function EditRecipe({ recipe }) {
   const [recipeDescription, setRecipeDescription] = useState(recipe.description)
   const [recipeIngredients, setRecipeIngredients] = useState(() => ingredientRowsFor(recipe.ingredients))
   const [recipeInstructions, setRecipeInstructions] = useState(() => stepRowsFor(recipe.instructions))
-  const [recipeRegion, setRecipeRegion] = useState(recipe.region)
   const [recipeImagePath, setRecipeImagePath] = useState(recipe.file_path)
   const router = useRouter();
 
@@ -31,8 +30,6 @@ export default function EditRecipe({ recipe }) {
         onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
         onInstructionsChange={setRecipeInstructions}
-        recipeRegion={recipeRegion}
-        onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
         onRecipeImageChange={async (evt) => {
           const imageFile = evt.target.files[0]
           if (!imageFile) return
@@ -76,7 +73,6 @@ export default function EditRecipe({ recipe }) {
               description: recipeDescription,
               ingredients: serializeIngredients(recipeIngredients),
               instructions: serializeSteps(recipeInstructions),
-              region: recipeRegion,
               file_path: recipeImagePath,
             })
             .match({
