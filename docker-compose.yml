@@ -1,0 +1,17 @@
+# Run with:  ./deploy.sh   (or: docker compose up -d --build)
+# Settings come from .env in this folder; copy .env.example to .env first.
+
+services:
+  recipe-demo:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:?Set NEXT_PUBLIC_SUPABASE_URL in .env}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?Set NEXT_PUBLIC_SUPABASE_ANON_KEY in .env}
+    image: recipe-demo:latest
+    container_name: recipe-demo
+    restart: unless-stopped
+    ports:
+      # Only reachable from devbox1 itself (e.g. through an SSH tunnel).
+      # To open it to your network, set APP_BIND=0.0.0.0 in .env.
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000"

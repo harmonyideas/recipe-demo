@@ -148,7 +148,25 @@ create policy "User can delete their own recipe image"
 This project builds and runs on Node.js 26 (pinned in `.nvmrc`, `.node-version` and `engines` in `package.json`). With nvm, run `nvm use` in this folder first.
 
 Install dependencies: `npm install`
-Run the application: `npm run dev`. Open your browser to `https://localhost:3000/` and you are ready to go 🚀.
+Run the application: `npm run dev`. Open your browser to `http://localhost:3000/` and you are ready to go 🚀.
+
+### 6. Run it in Docker (optional)
+
+The repo includes a `Dockerfile`, `docker-compose.yml` and a `deploy.sh` script that builds the app on Node.js 26 and keeps it running in a container.
+
+```
+git clone https://github.com/harmonyideas/recipe-demo.git
+cd recipe-demo
+cp .env.example .env      # then put your Supabase URL and anon key in .env
+./deploy.sh
+```
+
+`deploy.sh` pulls the latest code, rebuilds the image, restarts the container and waits until it is healthy. Run it again whenever you want to update. Use `./deploy.sh --no-pull` to rebuild without pulling.
+
+- The container restarts automatically after a crash or a reboot (`restart: unless-stopped`).
+- By default the app listens on `127.0.0.1:3000` on the Docker host, so it is reachable only from that machine or through an SSH tunnel. Set `APP_BIND=0.0.0.0` and/or `APP_PORT` in `.env` to change that. The login cookie is sent over plain HTTP unless you put the app behind HTTPS.
+- The Supabase values are compiled into the app when the image is built, so rebuild (`./deploy.sh`) after changing them.
+- Useful commands: `docker compose logs -f` (live logs), `docker compose ps` (status), `docker compose down` (stop and remove).
 
 ## Supabase details
 
