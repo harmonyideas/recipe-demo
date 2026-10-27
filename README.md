@@ -15,11 +15,11 @@ All recipes, as cards you click to open:
 
 ![All recipes](docs/screenshots/recipes.png)
 
-A recipe, with ingredients marked dry or wet, and buttons to edit, print or delete it:
+A recipe, with ingredients marked dry or wet, numbered instruction steps, and buttons to edit, print or delete it:
 
 ![Recipe detail](docs/screenshots/recipe-detail.png)
 
-Adding or editing a recipe. Each ingredient has an amount, a dry/wet type and a unit, including custom units such as "clove":
+Adding or editing a recipe. Each ingredient has an amount, a dry/wet type and a unit, including custom units such as "clove". Instructions are entered one numbered step at a time; steps can be moved up or down or removed, and Ctrl+Enter adds a new step below the current one:
 
 ![Edit recipe](docs/screenshots/recipe-edit.png)
 

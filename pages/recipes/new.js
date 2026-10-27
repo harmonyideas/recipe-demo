@@ -5,6 +5,7 @@ import { useState } from 'react';
 import RecipeForm from '../../components/recipe-form';
 import { supabase } from '../../supabase-client';
 import { serializeIngredients } from '../../utils/ingredients'
+import { serializeSteps } from '../../utils/steps'
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
@@ -12,7 +13,7 @@ export default function NewRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('')
   const [recipeDescription, setRecipeDescription] = useState('')
   const [recipeIngredients, setRecipeIngredients] = useState([])
-  const [recipeInstructions, setRecipeInstructions] = useState('')
+  const [recipeInstructions, setRecipeInstructions] = useState([''])
   const [recipeRegion, setRecipeRegion] = useState('')
   const [recipeImagePath, setRecipeImagePath] = useState('')
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function NewRecipe() {
         recipeIngredients={recipeIngredients}
         onIngredientsChange={setRecipeIngredients}
         recipeInstructions={recipeInstructions}
-        onInstructionsChange={(evt) => setRecipeInstructions(evt.target.value)}
+        onInstructionsChange={setRecipeInstructions}
         recipeRegion={recipeRegion}
         onRegionChange={(evt) => setRecipeRegion(evt.target.value)}
         onRecipeImageChange={async (evt) => {
@@ -74,7 +75,7 @@ export default function NewRecipe() {
               title: recipeTitle,
               description: recipeDescription,
               ingredients: serializeIngredients(recipeIngredients),
-              instructions: recipeInstructions,
+              instructions: serializeSteps(recipeInstructions),
               region: recipeRegion,
               file_path: recipeImagePath,
               user_id: session.user.id,

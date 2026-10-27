@@ -1,4 +1,5 @@
 import IngredientList from './ingredient-list'
+import StepList from './step-list'
 
 export default function RecipeForm({
   recipeTitle,
@@ -46,16 +47,7 @@ export default function RecipeForm({
       </div>
 
       <div className="mb-3">
-        <label htmlFor="instructions" className="form-label">Instructions</label>
-        <textarea
-          id="instructions"
-          name='instructions'
-          className="form-control"
-          rows={6}
-          value={recipeInstructions}
-          placeholder='Instructions'
-          onChange={onInstructionsChange}
-        />
+        <StepList value={recipeInstructions} onChange={onInstructionsChange} />
       </div>
 
       <div className="mb-3">

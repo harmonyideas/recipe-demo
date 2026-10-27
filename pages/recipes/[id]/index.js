@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase-client'
 import Header from '../../../components/header'
 import IngredientsView from '../../../components/ingredients-view'
+import StepsView from '../../../components/steps-view'
 
 
 export default function ViewRecipe({ recipe }) {
@@ -50,12 +51,12 @@ export default function ViewRecipe({ recipe }) {
                 <dt className="col-sm-3 text-muted">Ingredients</dt>
                 <dd className="col-sm-9"><IngredientsView raw={recipe.ingredients} /></dd>
 
-                <dt className="col-sm-3 text-muted">Instructions</dt>
-                <dd className="col-sm-9 pre-line">{recipe.instructions}</dd>
-
                 <dt className="col-sm-3 text-muted">Region</dt>
                 <dd className="col-sm-9">{recipe.region}</dd>
               </dl>
+
+              <h3 className="h5 mt-4 mb-3">Instructions</h3>
+              <StepsView raw={recipe.instructions} />
             </div>
 
             <div className="d-flex gap-2 mt-3 no-print">
